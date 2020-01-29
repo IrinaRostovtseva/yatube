@@ -10,13 +10,15 @@
     <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
     <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
   </head>
-  <body>
+  <body style="margin: 0;">
+    {% include "nav.html" %}
     <main>
-      <div class="container">
+      <div class="container" style="padding: 0 15px;">
         {% block content %}
             <!-- Содержимое страницы -->
         {% endblock content %}
       </div>
     </main>
+    {% include "footer.html" %}
   </body>
 </html>
