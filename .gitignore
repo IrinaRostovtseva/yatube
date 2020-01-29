@@ -133,3 +133,6 @@ dmypy.json
 
 # MacOS Desktop service file
 .DS_Store
+
+# IDE settings
+.vscode/
