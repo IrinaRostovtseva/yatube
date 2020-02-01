@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Войти{% endblock %}
+
+{% block content %}
+{% load user_filters %}
+    <section class="signup-block">
+        <div class="form-card__wrapper">
+            <h1 class="form-card__heading">Войти на сайт</h1>
+            {% if form.errors %}
+                <div class="alert alert-danger" role="alert">
+                Имя пользоваетеля и пароль не совпадают. Введите правильные данные.
+                </div>
+            {% endif %}
+            <p class="form-card__description">
+                Пожалуйста, авторизуйтесь.
+            </p>
+            <form class="form-card__form login-form" method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}">
+                <div class="login-form__field field">
+                    <label for="{{ form.username.id_for_label }}" class="field__label">Имя пользователя</label>
+                    {{ form.username|addclass:"field__input" }}
+                </div>
+                <div class="login-form__field field">
+                    <label for="{{ form.password.id_for_label }}" class="field__label">Пароль</label>
+                    {{ form.password|addclass:"field__input" }}
+                </div>
+                <div class="btn-group">
+                    <button type="submit" class="login-form__btn btn">
+                        Войти
+                    </button>
+                    <a href="{% url 'password_reset' %}" class="btn btn--light">
+                        Забыли пароль?
+                    </a>
+                </div>
+            </form>
+        </div>
+    </section>
+
+{% endblock %}

@@ -1,10 +1,38 @@
 {% extends "base.html" %}
-
 {% block title %}Зарегистрироваться{% endblock %}
+
 {% block content %}
-    <form method="post" action="{% url 'signup' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" value="Зарегистрироваться">Зарегистрироваться</button>
-    </form>
+{% load user_filters %}
+    <section class="signup-block">
+        <div class="form-card__wrapper">
+            <h1 class="form-card__heading">Зарегистрироваться</h1>
+            <form class="form-card__form signup-form" method="post" action="{% url 'signup' %}">
+                {% csrf_token %}
+
+                {% for field in form%}
+                    <div class="signup-form__field field">
+                        <label class="field__label" for="{{ field.id_for_label }}">{{ field.label }}
+                        {% if field.is_required %}
+                            <sup>*</sup>
+                        {% endif %}
+                        </label>
+                        <div style="width: 430px;">
+                            {{ field|addclass:"field__input" }}
+
+                            {% if field.help_text %}
+                                <span class="field__help-text" id="{{ field.id_for_label }}">{{ field.help_text }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+                <button type="submit" class="signup-form__btn btn" value="Зарегистрироваться">Зарегистрироваться</button>
+            </form>
+
+            {% for error in form.errors %}
+                <div class="error-modal" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </div>
+    </section>
 {% endblock %}
