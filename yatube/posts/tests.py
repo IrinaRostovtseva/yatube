@@ -1,3 +1,9 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 
-# Create your tests here.
+
+class TestStringMethods(TestCase):
+    def test_length(self):
+        self.assertEqual(len("yatube"), 6)
+
+    def test_show_msg(self):
+        self.assertTrue(False, msg="Важная проверка на истинность")

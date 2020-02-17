@@ -8,12 +8,15 @@
                     <a class="user-menu__item user-menu__item--inactive" href="#">Пользователь: {{ user.username }}</a>
                 </li>
                 <li>
+                    <a class="user-menu__item" href="{% url 'new_post' %}">Добавить пост</a>
+                </li>
+                <li>
                     <a class="user-menu__item" href="{% url 'password_change' %}">Изменить пароль</a>
                 </li>
                 <li>
                     <a class="user-menu__item" href="{% url 'logout' %}">Выйти</a>
                 </li>
-                {% else %}
+            {% else %}
                 <li>
                     <a class="user-menu__item" href="{% url 'login' %}">Войти</a>
                 </li>

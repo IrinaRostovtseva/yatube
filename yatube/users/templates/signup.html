@@ -12,9 +12,6 @@
                 {% for field in form%}
                     <div class="signup-form__field field">
                         <label class="field__label" for="{{ field.id_for_label }}">{{ field.label }}
-                        {% if field.is_required %}
-                            <sup>*</sup>
-                        {% endif %}
                         </label>
                         <div style="width: 430px;">
                             {{ field|addclass:"field__input" }}

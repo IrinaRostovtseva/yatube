@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Создать пост{% endblock %}
+
+{% block content %}
+{% load user_filters %}
+    <section class="new-post">
+        <div class="form-card__wrapper">
+            <h1 class="form-card__heading">Новый пост</h1>
+            <form class="form-card__form new-post__form" method="POST">
+                {% for field in form %}
+                {% csrf_token %}
+                    <div class="form-card__field field">
+                        <label for="{{ field.id_for_label }}" class="field__label">{{ field.label }}</label>
+                        {{ field|addclass:"field__input" }}
+                        {% if field.help_text %}
+                            <span class="field__help-text">{{ field.help_text }}</span>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <button type="submit" class="btn">Создать пост</button>
+            </form>
+        </div>
+    </section>
+{% endblock %}

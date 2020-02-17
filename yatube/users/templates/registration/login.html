@@ -7,13 +7,14 @@
         <div class="form-card__wrapper">
             <h1 class="form-card__heading">Войти на сайт</h1>
             {% if form.errors %}
-                <div class="alert alert-danger" role="alert">
+                <p class="form-card__description form-card__description--alert" role="alert">
                 Имя пользоваетеля и пароль не совпадают. Введите правильные данные.
-                </div>
+                </p>
+            {% else %}
+                <p class="form-card__description">
+                    Пожалуйста, авторизуйтесь.
+                </p>
             {% endif %}
-            <p class="form-card__description">
-                Пожалуйста, авторизуйтесь.
-            </p>
             <form class="form-card__form login-form" method="post" action="{% url 'login' %}">
             {% csrf_token %}
                 <input type="hidden" name="next" value="{{ next }}">
