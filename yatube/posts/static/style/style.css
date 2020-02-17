@@ -103,38 +103,112 @@ body {
     padding: 50px 15px;
 }
 
-.page-heading {
+.text {
     margin: 0;
+    margin-bottom: 25px;
+}
+
+.link {
+    font: inherit;
+    color: #68b738;
+}
+
+.link:hover,
+.link:focus {
+    color: #5eaa2f;
+    text-decoration: none;
+}
+
+.link:active {
+    color: rgba(94, 170, 47, 0.8);
+}
+
+.post-block__wrapper,
+.wrapper {
     padding: 0 80px;
+}
+.post-block__heading,
+.heading {
+    margin: 0;
+    padding: 0;
     margin-bottom: 60px;
     font-size: 40px;
     line-height: 48px;
     font-weight: normal;
 }
 
-.post-list {
+.post-block__list {
     margin: 0;
-    padding: 0 80px;
+    padding: 0;
     list-style: none;
 }
 
-.post-item {
+.post {
     border-bottom: 2px solid #c5c5c5;
 }
 
-.post-item:not(:last-of-type) {
+.post {
     margin-bottom: 40px;
 }
 
-.post-item__heading {
+.post__heading {
     margin: 0 0 15px 0;
     font-size: 22px;
     line-height: 26px;
 }
 
-.post-item__text {
+.post__text {
     margin: 0;
     margin-bottom: 5px;
+}
+
+.paginator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.paginator__item:not(:last-of-type) {
+    margin-right: 15px;
+}
+
+.paginator__link {
+    display: block;
+    min-width: 40px;
+    padding: 5px;
+    font: inherit;
+    text-align: center;
+    font-size: 24px;
+    line-height: 30px;
+    text-decoration: none;
+    color: #68b738;
+    border: 2px solid #68b738;
+    border-radius: 4px;
+    background-color: transparent;
+    box-sizing: border-box;
+}
+
+.paginator__link:hover,
+.paginator__link:focus,
+.paginator__link:active {
+    color: #ffffff;
+    background-color: #5eaa2f;
+    border-color: transparent;
+}
+
+.paginator__item--active .paginator__link {
+   background-color: #68b738;
+   color: #ffffff;
+}
+
+.paginator__item--disabled .paginator__link {
+    pointer-events: none;
+    border-color: #d2d2d2;
+    color: #d2d2d2;
 }
 
 .footer {
@@ -297,4 +371,19 @@ body {
     margin-bottom: 40px;
     padding: 0 50px;
     text-align: center;
+}
+
+.new-post__form {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.new-post__form .field__label {
+    min-width: 140px;
+}
+
+.new-post__form textarea {
+    width: 400px;
+    min-height: 130px;
 }
