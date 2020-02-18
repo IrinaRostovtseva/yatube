@@ -12,12 +12,10 @@
   </head>
   <body>
     {% include "nav.html" %}
-    <main>
-      <div class="container">
-        {% block content %}
-            <!-- Содержимое страницы -->
-        {% endblock content %}
-      </div>
+    <main class="content-block">
+      {% block content %}
+        <!-- Содержимое страницы -->
+      {% endblock content %}
     </main>
     {% include "footer.html" %}
   </body>

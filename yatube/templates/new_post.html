@@ -1,11 +1,23 @@
 {% extends "base.html" %}
-{% block title %}Создать пост{% endblock %}
+{% block title %}
+    {% if not form.text %}
+        Создать пост
+    {% else %}
+        Редактировать пост
+    {% endif %}
+{% endblock %}
 
 {% block content %}
 {% load user_filters %}
     <section class="new-post">
         <div class="form-card__wrapper">
-            <h1 class="form-card__heading">Новый пост</h1>
+            <h1 class="form-card__heading">
+                {% if not form.text %}
+                    Новый пост
+                {% else %}
+                    Редактировать пост
+                {% endif %}
+            </h1>
             <form class="form-card__form new-post__form" method="POST">
                 {% for field in form %}
                 {% csrf_token %}
@@ -17,7 +29,13 @@
                         {% endif %}
                     </div>
                 {% endfor %}
-                <button type="submit" class="btn">Создать пост</button>
+                <button type="submit" class="btn">
+                    {% if not form.text %}
+                        Добавить
+                    {% else %}
+                        Сохранить
+                    {% endif %}
+                </button>
             </form>
         </div>
     </section>
