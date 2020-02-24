@@ -529,3 +529,7 @@ body {
 .user-posts__btn-group .btn:not(:last-of-type) {
     margin-right: auto;
 }
+
+.page-error-block__btn {
+    margin-right: auto;
+}

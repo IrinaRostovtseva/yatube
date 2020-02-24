@@ -134,3 +134,12 @@ class TestDeletePost(TestCase):
 
     def tearDown(self):
         self.client.logout()
+
+
+class TestPageNotFound(TestCase):
+    def setUp(self):
+        self.client = Client()
+
+    def test_page_not_found_code(self):
+        response = self.client.get("/oops/")
+        self.assertEqual(response.status_code, 404)

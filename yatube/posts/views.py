@@ -104,3 +104,11 @@ def post_delete(request, username, post_id):
             return redirect("profile", username=username)
         return render(request, "delete_post_confirm.html", {"post": post})
     return redirect("index")
+
+
+def page_not_found(request, exception):
+    return render(request, "misc/404.html", {"path": request.path}, status=404)
+
+
+def server_error(request):
+    return render(request, "misc/500.html", status=500)
