@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}
-    {% if not form.text %}
+    {% if not form.text.value %}
         Создать пост
     {% else %}
         Редактировать пост
@@ -12,7 +12,7 @@
     <section class="new-post">
         <div class="form-card__wrapper">
             <h1 class="form-card__heading">
-                {% if not form.text %}
+                {% if not form.text.value %}
                     Новый пост
                 {% else %}
                     Редактировать пост
@@ -30,7 +30,7 @@
                     </div>
                 {% endfor %}
                 <button type="submit" class="btn">
-                    {% if not form.text %}
+                    {% if not form.text.value %}
                         Добавить
                     {% else %}
                         Сохранить

@@ -18,10 +18,14 @@ def index(request):
 
 def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
-    posts = Post.objects.filter(group=group).order_by("-pub_date")[:12]
+    posts = Post.objects.filter(group=group).order_by("-pub_date")
+    paginator = Paginator(posts, 10)
+    page_num = request.GET.get("page")
+    page = paginator.get_page(page_num)
     context = {
         "group": group,
-        "posts": posts
+        "paginator": paginator,
+        "page": page
     }
     return render(request, "group.html", context)
 
@@ -69,16 +73,34 @@ def post_view(request, username, post_id):
 
 def post_edit(request, username, post_id):
     post = get_object_or_404(Post, id=post_id)
-    if post.author == request.user:
+    if username == str(request.user):
         if request.method == "POST":
             form = PostForm(request.POST, instance=post)
             if form.is_valid():
                 form.save(commit=False)
                 form.author = request.user
                 form.save()
-                return redirect("index")
-            return render(request, "new_post.html", {"form": form})
+                return redirect("post", username=username, post_id=post_id)
+            context = {
+                "form": form,
+                "post": post
+            }
+            return render(request, "new_post.html", context)
 
         form = PostForm(instance=post)
-        return render(request, "new_post.html", {"form": form})
+        context = {
+            "form": form,
+            "post": post
+        }
+        return render(request, "new_post.html", context)
+    return redirect("index")
+
+
+def post_delete(request, username, post_id):
+    post = Post.objects.get(id=post_id)
+    if username == str(request.user):
+        if request.method == "POST":
+            post.delete()
+            return redirect("profile", username=username)
+        return render(request, "delete_post_confirm.html", {"post": post})
     return redirect("index")

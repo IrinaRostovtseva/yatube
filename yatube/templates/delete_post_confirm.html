@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Удаление поста{% endblock %}
+
+{% block content %}
+    <section class="delete_confirm-block">
+        <div class="form-card__wrapper">
+            <h1 class="form-card__heading">Удалить пост</h1>
+            <p class="form-card__description">Вы собираетесь удалить пост. Уверены?</p>
+            <form method="post" action="{% url 'post_delete' username=user.username post_id=post.id %}" class="form-card__form">
+            {% csrf_token %}
+                <div class="form-card__btn-group">
+                    <button type="submit" class="form-card__btn btn btn--light-accent">Удалить</button>
+                    <a class="form-card__btn btn btn--light" href="{% url 'profile' username=user %}">Отмена</a>
+                </div>
+            </form>
+        </div>
+    </section>
+{% endblock %}

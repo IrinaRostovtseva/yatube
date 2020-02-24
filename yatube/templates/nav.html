@@ -5,7 +5,7 @@
             <ul class="user-menu__list">
             {% if user.is_authenticated %}
                 <li>
-                    <a class="user-menu__item user-menu__item--inactive" href="#">Пользователь: {{ user.username }}</a>
+                    <a class="user-menu__item" href="{% url 'profile' username=user.username %}">Пользователь: {{ user.username }}</a>
                 </li>
                 <li>
                     <a class="user-menu__item" href="{% url 'new_post' %}">Добавить пост</a>

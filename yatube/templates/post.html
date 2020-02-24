@@ -30,12 +30,13 @@
             <div class="user-posts__wrapper">
                 <h1 class="user-posts__heading">Все записи пользователя {{ user_profile.username }}</h1>
                 <article class="user-posts__post">
-                    <a class="user-posts__user-link link" href="/{{user_profile.username}}/">@{{user_profile.username}}</a>
+                    <a class="user-posts__user-link link" href="{% url 'profile' username=user_profile.username}">@{{user_profile.username}}</a>
                     <p class="user-posts__post-text">{{ post.text }}</p>
                     <date class="user-posts__post-date" date="{{ post.pub_date }}">{{ post.pub_date|date:"d E Y" }} г.</date>
                     <div class="user-posts__btn-group">
                         {% if user_profile.username == user.username %}
-                            <a href="/{{ user_profile.username }}/{{ post.id }}/edit/" class="btn btn--light">Редактировать</a>
+                        <a href="{% url 'post_edit' username=user_profile.username post_id=post.id %}" class="btn btn--light">Редактировать</a>
+                        <a href="{% url 'post_delete' username=user_profile.username post_id=post.id %}" class="btn btn--light-accent">Удалить</a>
                         {% endif %}
                     </div>
                 </article>

@@ -7,7 +7,7 @@
       <ul class="post-block__list post-list">
         {% for post in page %}
         <li class="post-list__item post">
-          <h2 class="post__heading">Автор: {{ post.author.get_full_name }}, дата публикации: {{ post.pub_date|date:"d M Y" }}</h2>
+          <h2 class="post__heading">Автор: <a href="{% url 'profile' username=post.author.username %}" class="link">{{ post.author.get_full_name }}</a>, дата публикации: {{ post.pub_date|date:"d M Y" }}</h2>
           <p class="post__text">{{ post.text }}</p>
         </li>
         {% endfor %}

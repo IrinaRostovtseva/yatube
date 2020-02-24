@@ -151,10 +151,12 @@ body {
 }
 
 .post-block__wrapper,
+.group-block__wrapper,
 .wrapper {
     padding: 0 80px;
 }
 .post-block__heading,
+.group-block__heading,
 .heading,
 .user-profile__heading,
 .user-posts__heading {
@@ -258,6 +260,20 @@ body {
     padding: 15px 80px;
 }
 
+.group-block__post-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.group-block__description {
+    margin: 0;
+    margin-bottom: 50px;
+    font: inherit;
+    font-size: 18px;
+    line-height: 22px;
+}
+
 .form-card__wrapper {
     width: 850px;
     margin: 30px auto;
@@ -335,7 +351,8 @@ body {
     color: #666666
 }
 
-.btn-group {
+.btn-group,
+.form-card__btn-group {
     display: flex;
     justify-content: space-around;
     width: 100%;
@@ -377,6 +394,22 @@ body {
 .btn--light:active {
     color: #ffffff;
     background-color: #5eaa2f;
+    border-color: transparent;
+}
+
+.btn--light-accent {
+    font: inherit;
+    text-decoration: none;
+    color: #ff2828;
+    border: 2px solid #ff2828;
+    background-color: transparent;
+}
+
+.btn--light-accent:hover,
+.btn--light-accent:focus,
+.btn--light-accent:active {
+    color: #ffffff;
+    background-color: #e42323;
     border-color: transparent;
 }
 
@@ -483,7 +516,7 @@ body {
 
 .user-posts__post-date {
     display: block;
-    margin-bottom: 15px;
+    margin-bottom: 25px;
     font-style: italic;
     text-align: right;
 }
