@@ -2,7 +2,7 @@ from django.core import mail
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from .models import User, Post
+from .models import User, Post, Group
 
 
 class TestUserRegistration(TestCase):
@@ -143,3 +143,30 @@ class TestPageNotFound(TestCase):
     def test_page_not_found_code(self):
         response = self.client.get("/oops/")
         self.assertEqual(response.status_code, 404)
+
+
+class TestImageUpload(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create(username="user", password="one2345")
+        self.client.force_login(self.user)
+        self.group = Group.objects.create(title="cactuars", slug="cact", description="all about cactuars")
+
+    def test_image_being(self):
+        with open("media/posts/Flickr-User-Bob-Simari-960x480.jpg", "rb") as fp:
+            self.client.post("/new/", {"text": "post with pic", "group": self.group.id, "image": fp}, follow=True)
+
+            response = self.client.get("/user/1/")
+            self.assertIn("<img", response.content.decode())
+            self.assertIn("<img", self.client.get("/").content.decode())
+
+            response = self.client.get("/user/")
+            self.assertIn("<img", response.content.decode())
+            response = self.client.get("/group/cact/")
+            self.assertIn('<img', response.content.decode())
+
+    def test_not_image_upload(self):
+        with open("../requirements.txt", "rb") as fp:
+            response = self.client.post("/new/", {"text": "post with non pic", "image": fp})
+            print(response)
+            self.assertNotIn("<img", self.client.get("/user/1/").content.decode())

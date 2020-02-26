@@ -447,11 +447,18 @@ body {
 
 .new-post__form .field__label {
     min-width: 140px;
+    vertical-align: middle;
 }
 
 .new-post__form textarea {
     width: 400px;
     min-height: 130px;
+}
+
+.new-post__form input[type=file] {
+    border: none;
+    width: auto;
+
 }
 
 .profile-container {

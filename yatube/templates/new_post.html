@@ -18,7 +18,7 @@
                     Редактировать пост
                 {% endif %}
             </h1>
-            <form class="form-card__form new-post__form" method="POST">
+            <form class="form-card__form new-post__form" method="POST" enctype="multipart/form-data">
                 {% for field in form %}
                 {% csrf_token %}
                     <div class="form-card__field field">

@@ -33,10 +33,12 @@ def group_posts(request, slug):
 def new_post(request):
     if request.user.is_authenticated:
         if request.method == "POST":
-            form = PostForm(request.POST)
+            form = PostForm(request.POST or None, files=request.FILES or None)
             if form.is_valid():
                 post = form.save(commit=False)
                 post.author = request.user
+                form.text = form.cleaned_data["text"]
+                form.group = form.cleaned_data["group"]
                 post.save()
                 return redirect("index")
 
@@ -75,10 +77,12 @@ def post_edit(request, username, post_id):
     post = get_object_or_404(Post, id=post_id)
     if username == str(request.user):
         if request.method == "POST":
-            form = PostForm(request.POST, instance=post)
+            form = PostForm(request.POST or None, files=request.FILES or None, instance=post)
             if form.is_valid():
                 form.save(commit=False)
                 form.author = request.user
+                form.text = form.cleaned_data["text"]
+                form.group = form.cleaned_data["group"]
                 form.save()
                 return redirect("post", username=username, post_id=post_id)
             context = {

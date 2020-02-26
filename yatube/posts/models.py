@@ -21,6 +21,7 @@ class Post(models.Model):
                                related_name="author_posts")
     group = models.ForeignKey(Group, verbose_name="Группа", on_delete=models.SET_NULL,
                               blank=True, null=True, related_name="group_posts", )
+    image = models.ImageField(upload_to="posts/media/", null=True, verbose_name="Изображение")
 
     def __str__(self):
         return str(self.pk)
