@@ -1,7 +1,8 @@
-from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
-from .models import Post, Group, User
-from .forms import PostForm
+from django.shortcuts import get_object_or_404, redirect, render
+
+from .forms import PostForm, CommentForm
+from .models import Comment, Group, Post, User
 
 
 def index(request):
@@ -37,8 +38,8 @@ def new_post(request):
             if form.is_valid():
                 post = form.save(commit=False)
                 post.author = request.user
-                form.text = form.cleaned_data["text"]
-                form.group = form.cleaned_data["group"]
+                post.text = form.cleaned_data["text"]
+                post.group = form.cleaned_data["group"]
                 post.save()
                 return redirect("index")
 
@@ -65,10 +66,18 @@ def post_view(request, username, post_id):
     user_profile = get_object_or_404(User, username=username)
     posts_count = Post.objects.filter(author=user_profile.id).count()
     post = get_object_or_404(Post, id=post_id)
+    form = CommentForm()
+    comments = Comment.objects.filter(post=post_id).order_by("-created")
+    paginator = Paginator(comments, 10)
+    page_num = request.GET.get("page")
+    page = paginator.get_page(page_num)
     context = {
         "user_profile": user_profile,
         "post": post,
         "count": posts_count,
+        "form": form,
+        "paginator": paginator,
+        "page": page,
     }
     return render(request, "post.html", context)
 
@@ -108,6 +117,27 @@ def post_delete(request, username, post_id):
             return redirect("profile", username=username)
         return render(request, "delete_post_confirm.html", {"post": post})
     return redirect("index")
+
+
+def add_comment(request, username, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                comment = form.save(commit=False)
+                comment.post = post
+                comment.author = request.user
+                comment.text = form.cleaned_data["text"]
+                comment.save()
+                return redirect("post", username=username, post_id=post_id)
+
+            context = {
+                "form": form,
+                "post": post,
+            }
+            return render(request, "post.html", context)
+    return redirect("login")
 
 
 def page_not_found(request, exception):

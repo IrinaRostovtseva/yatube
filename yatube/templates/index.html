@@ -2,21 +2,17 @@
 {% block title %} Последние обновления {% endblock %}
 {% block content %}
 {% load thumbnail %}
-  <section class="posts-block">
+<section class="posts-block">
     <div class="post-block__wrapper">
-      <h1 class="post-block__heading">Последние обновления</h1>
-      <ul class="post-block__list post-list">
-        {% for post in page %}
-        <li class="post-list__item post">
-          <h2 class="post__heading">Автор: <a href="{% url 'profile' username=post.author.username %}" class="link">{{ post.author.get_full_name }}</a>, дата публикации: {{ post.pub_date|date:"d M Y" }}</h2>
-          {% thumbnail post.image "960x339" crop="center" upscale=True as im %}
-            <img class="post__image" src="{{ im.url }}" width=100% heigth={{ im.height }}>
-          {% endthumbnail %}
-          <p class="post__text">{{ post.text }}</p>
-        </li>
-        {% endfor %}
-      </ul>
-      {% include "paginator.html" with items=page paginator=paginator %}
+        <h1 class="post-block__heading">Последние обновления</h1>
+        <ul class="post-block__list post-list">
+            {% for post in page %}
+            <li class="post-list__item">
+                {% include "post_item.html" with post=post %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% include "paginator.html" with items=page paginator=paginator %}
     </div>
-  </section>
+</section>
 {% endblock %}

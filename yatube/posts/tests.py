@@ -1,8 +1,8 @@
 from django.core import mail
-from django.test import TestCase, Client
+from django.test import Client, TestCase
 from django.urls import reverse
 
-from .models import User, Post, Group
+from .models import Group, Post, User
 
 
 class TestUserRegistration(TestCase):
@@ -46,7 +46,7 @@ class TestNewPost(TestCase):
         self.assertEqual("/auth/login/", response.redirect_chain[0][0])
 
     def test_post_creation(self):
-        self.client.login(instance=self.user)
+        self.client.force_login(self.user)
         post = Post.objects.create(author=self.user, text="Test text")
         response = self.client.post("/new/", instance=post, follow=True)
         self.assertEqual(response.status_code, 200)
@@ -54,7 +54,7 @@ class TestNewPost(TestCase):
         searched_content = f'<p class="post__text">{post.text}</p>'
         self.assertIn(searched_content, self.client.get("").content.decode())
 
-        searched_content = f'<p class="user-posts__post-text">{post.text}</p>'
+        searched_content = f'<p class="post__text">{post.text}</p>'
         response = self.client.get(reverse("profile", args=[post.author]))
         self.assertIn(searched_content, response.content.decode())
 
@@ -88,7 +88,7 @@ class TestEditPost(TestCase):
         searched_content = f'<p class="post__text">{self.post.text}</p>'
         self.assertIn(searched_content, self.client.get("").content.decode())
 
-        searched_content = f'<p class="user-posts__post-text">{self.post.text}</p>'
+        searched_content = f'<p class="post__text">{self.post.text}</p>'
         response = self.client.get(reverse("profile", args=[self.post.author]))
         self.assertIn(searched_content, response.content.decode())
 
@@ -124,7 +124,7 @@ class TestDeletePost(TestCase):
         self.assertNotIn(searched_content,
                          self.client.get("").content.decode())
 
-        searched_content = f'<p class="user-posts__post-text">{self.post.text}</p>'
+        searched_content = f'<p class="post__text">{self.post.text}</p>'
         response = self.client.get(reverse("profile", args=[self.post.author]))
         self.assertNotIn(searched_content, response.content.decode())
 
@@ -168,5 +168,4 @@ class TestImageUpload(TestCase):
     def test_not_image_upload(self):
         with open("../requirements.txt", "rb") as fp:
             response = self.client.post("/new/", {"text": "post with non pic", "image": fp})
-            print(response)
             self.assertNotIn("<img", self.client.get("/user/1/").content.decode())

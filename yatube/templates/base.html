@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{% block title %}Заголовок страницы{% endblock %} | Yatube</title>
-        <!-- Загрузка статики -->
     {% load static %}
     <link rel="stylesheet" href="{% static 'style/normalize.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'style/style.css' %}" type="text/css">
-  </head>
-  <body>
+</head>
+
+<body>
     {% include "nav.html" %}
     <main class="content-block">
-      {% block content %}
-        <!-- Содержимое страницы -->
-      {% endblock content %}
+        {% block content %}
+        {% endblock content %}
     </main>
     {% include "footer.html" %}
-  </body>
+</body>
+
 </html>

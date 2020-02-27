@@ -28,26 +28,12 @@
         </section>
         <section class="user-posts">
             <div class="user-posts__wrapper">
-                <h1 class="user-posts__heading">Все записи пользователя {{ user_profile.username }}</h1>
-                <ul class="user-posts__list">
+                <h1 class="user-posts__heading">Все записи пользователя {{ post.author }}</h1>
+                <ul class="user-posts__list post-list">
                     {% for post in page %}
                     {% load thumbnail %}
-                        <li class="user-posts__post">
-                            <a class="user-posts__user-link link" href="{% url 'profile' username=user_profile.username}">@{{user_profile.username}}</a>
-                            {% thumbnail post.image "960x339" crop="center" upscale=True as im %}
-                                <img class="post__image" src="{{ im.url }}" width=100% heigth={{ im.height }}>
-                            {% endthumbnail %}
-                            <p class="user-posts__post-text">{{ post.text }}</p>
-                            <date class="user-posts__post-date" date="{{ post.pub_date }}">{{ post.pub_date|date:"d E Y" }} г.</date>
-                            <div class="user-posts__btn-group">
-                                {% if user.is_authenticated %}
-                                    <a href="{% url 'post' username=post.author post_id=post.id %}" class="btn">Оставить комментарий</a>
-                                {% endif %}
-                                {% if user_profile.username == user.username %}
-                                    <a href="{% url 'post_edit' username=post.author post_id=post.id %}" class="btn btn--light">Редактировать</a>
-                                    <a href="{% url 'post_delete' username=post.author post_id=post.id %}" class="btn btn--light-accent">Удалить</a>
-                                {% endif %}
-                            </div>
+                        <li class="post-list__item">
+                            {% include "post_item.html" with post=post %}
                         </li>
                     {% endfor %}
                 </ul>
