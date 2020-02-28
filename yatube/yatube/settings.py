@@ -96,6 +96,13 @@ DATABASES = {
     }
 }
 
+#Cache
+
+CACHES = {
+        'default': {
+                'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -144,3 +151,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 #Login
 LOGIN_URL = "auth/login"
 LOGIN_REDIRECT_URL = "index"
+
+
+# Logging
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"level": "DEBUG", "class": "logging.StreamHandler"}},
+    "loggers": {"django.db.backends": {"handlers": ["console"], "level": "DEBUG"}},
+}

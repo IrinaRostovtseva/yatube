@@ -1,5 +1,6 @@
 from django.core import mail
-from django.test import Client, TestCase
+from django.core.cache import cache
+from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 
 from .models import Group, Post, User
@@ -27,6 +28,7 @@ class TestUserRegistration(TestCase):
             profile.context["user_profile"].username, self.user.username)
 
 
+
 class TestNewPost(TestCase):
     def setUp(self):
         self.client = Client()
@@ -47,12 +49,13 @@ class TestNewPost(TestCase):
 
     def test_post_creation(self):
         self.client.force_login(self.user)
+        cache.clear()
         post = Post.objects.create(author=self.user, text="Test text")
         response = self.client.post("/new/", instance=post, follow=True)
         self.assertEqual(response.status_code, 200)
 
         searched_content = f'<p class="post__text">{post.text}</p>'
-        self.assertIn(searched_content, self.client.get("").content.decode())
+        self.assertIn(searched_content, self.client.get("/").content.decode())
 
         searched_content = f'<p class="post__text">{post.text}</p>'
         response = self.client.get(reverse("profile", args=[post.author]))
@@ -77,6 +80,7 @@ class TestEditPost(TestCase):
 
     def test_post_editing(self):
         self.client.login(instance=self.user)
+        cache.clear()
         response = self.client.get(
             reverse("post_edit", args=[self.user.username, self.post.id]), follow=True)
         self.assertEqual(response.status_code, 200)
@@ -114,6 +118,7 @@ class TestDeletePost(TestCase):
 
     def test_post_delete(self):
         self.client.force_login(self.user)
+        cache.clear()
         response = self.client.post(
             reverse("post_delete", args=[self.user.username, self.post.id]), data=None, follow=True)
         self.assertEqual(response.status_code, 200)
@@ -148,13 +153,16 @@ class TestPageNotFound(TestCase):
 class TestImageUpload(TestCase):
     def setUp(self):
         self.client = Client()
+        cache.clear()
         self.user = User.objects.create(username="user", password="one2345")
         self.client.force_login(self.user)
-        self.group = Group.objects.create(title="cactuars", slug="cact", description="all about cactuars")
+        self.group = Group.objects.create(
+            title="cactuars", slug="cact", description="all about cactuars")
 
     def test_image_being(self):
         with open("media/posts/Flickr-User-Bob-Simari-960x480.jpg", "rb") as fp:
-            self.client.post("/new/", {"text": "post with pic", "group": self.group.id, "image": fp}, follow=True)
+            self.client.post(
+                "/new/", {"text": "post with pic", "group": self.group.id, "image": fp}, follow=True)
 
             response = self.client.get("/user/1/")
             self.assertIn("<img", response.content.decode())
@@ -165,7 +173,29 @@ class TestImageUpload(TestCase):
             response = self.client.get("/group/cact/")
             self.assertIn('<img', response.content.decode())
 
+    def tearDown(self):
+        cache.clear()
+
     def test_not_image_upload(self):
         with open("../requirements.txt", "rb") as fp:
-            response = self.client.post("/new/", {"text": "post with non pic", "image": fp})
-            self.assertNotIn("<img", self.client.get("/user/1/").content.decode())
+            response = self.client.post(
+                "/new/", {"text": "post with non pic", "image": fp})
+            self.assertNotIn("<img", self.client.get(
+                "/user/1/").content.decode())
+
+
+class TestIndexPageCache(TestCase):
+    def setUp(self):
+        self.client = Client()
+        cache.clear()
+        self.user = User.objects.create(username="user", password="1234five")
+        self.client.force_login(self.user)
+
+    def test_index_cache(self):
+        post1 = Post.objects.create(author=self.user, text="Test post 1")
+        response = self.client.get("/")
+        self.assertIn("Test post 1", self.client.get("/").content.decode())
+        post2 = Post.objects.create(author=self.user, text="Test post 2 ")
+        self.assertNotIn("Test post 2", self.client.get("/").content.decode())
+        cache.clear()
+        self.assertIn("Test post 2", self.client.get("/").content.decode())

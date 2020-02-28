@@ -1,12 +1,14 @@
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.cache import cache_page
 
-from .forms import PostForm, CommentForm
+from .forms import CommentForm, PostForm
 from .models import Comment, Group, Post, User
 
 
+@cache_page(20)
 def index(request):
-    post_list = Post.objects.order_by("-pub_date")
+    post_list = Post.objects.prefetch_related("author").order_by("-pub_date")
     paginator = Paginator(post_list, 10)
     page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
@@ -19,7 +21,7 @@ def index(request):
 
 def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
-    posts = Post.objects.filter(group=group).order_by("-pub_date")
+    posts = Post.objects.select_related("author", "group").filter(group=group).order_by("-pub_date")
     paginator = Paginator(posts, 10)
     page_num = request.GET.get("page")
     page = paginator.get_page(page_num)
@@ -50,7 +52,7 @@ def new_post(request):
 
 def profile(request, username):
     user_profile = get_object_or_404(User, username=username)
-    posts = Post.objects.filter(author=user_profile.id).order_by("-pub_date")
+    posts = Post.objects.select_related("author").filter(author=user_profile.id).order_by("-pub_date")
     paginator = Paginator(posts, 5)
     page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
@@ -67,7 +69,7 @@ def post_view(request, username, post_id):
     posts_count = Post.objects.filter(author=user_profile.id).count()
     post = get_object_or_404(Post, id=post_id)
     form = CommentForm()
-    comments = Comment.objects.filter(post=post_id).order_by("-created")
+    comments = Comment.objects.select_related("author", "post").filter(post=post_id).order_by("-created")
     paginator = Paginator(comments, 10)
     page_num = request.GET.get("page")
     page = paginator.get_page(page_num)
@@ -86,7 +88,8 @@ def post_edit(request, username, post_id):
     post = get_object_or_404(Post, id=post_id)
     if username == str(request.user):
         if request.method == "POST":
-            form = PostForm(request.POST or None, files=request.FILES or None, instance=post)
+            form = PostForm(request.POST or None,
+                            files=request.FILES or None, instance=post)
             if form.is_valid():
                 form.save(commit=False)
                 form.author = request.user

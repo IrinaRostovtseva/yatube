@@ -120,18 +120,22 @@ body {
     margin-bottom: 25px;
 }
 
-.link {
+.link,
+.field a {
     font: inherit;
     color: #68b738;
 }
 
 .link:hover,
-.link:focus {
+.link:focus,
+.field a:hover,
+.field a:focus {
     color: #5eaa2f;
     text-decoration: none;
 }
 
-.link:active {
+.link:active,
+.field a:active {
     color: rgba(94, 170, 47, 0.8);
 }
 
@@ -294,17 +298,31 @@ body {
     display: flex;
     width: 100%;
     margin: 0 0 30px 0;
+    flex-wrap: wrap;
+    align-items: baseline;
 }
 
 .field:last-of-type {
     margin-bottom: 40px;
 }
 
-.field__label {
+.field__label,
+.field label {
     display: block;
     min-width: 240px;
     margin-right: 20px;
     text-align: right;
+}
+
+.field a {
+    display: block;
+    max-width: 375px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+.field__input-wrapper {
+    width: 430px;
 }
 
 .field__input {
@@ -325,7 +343,6 @@ body {
 }
 
 .field__help-text {
-    display: inline-block;
     width: 100%;
     vertical-align: baseline;
     margin: 0;
@@ -427,7 +444,8 @@ body {
     justify-content: center;
 }
 
-.new-post__form .field__label {
+.new-post__form .field__label,
+.new-post__form label  {
     min-width: 140px;
 }
 
@@ -436,10 +454,45 @@ body {
     min-height: 130px;
 }
 
-.new-post__form input[type=file] {
+.new-post__form input[type="file"] {
     border: none;
     width: auto;
     cursor: pointer;
+}
+
+.new-post__form input[name="image-clear"] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}
+
+label[for="image-clear_id"] {
+    position: relative;
+    padding-left: 57px;
+    box-sizing: border-box;
+}
+
+label[for="image-clear_id"]::before {
+    position: absolute;
+    left: 30px;
+    top: 2px;
+    width: 15px;
+    height: 15px;
+    border: 2px solid #68b738;
+    border-radius: 2px;
+    content: "";
+}
+
+input[type="checkbox"]:checked + label[for="image-clear_id"]::after {
+    position: absolute;
+    left: 33px;
+    top: 2px;
+    font-weight: bolder;
+    color: #68b738;
+    content: "✓";
 }
 
 .profile-container {
