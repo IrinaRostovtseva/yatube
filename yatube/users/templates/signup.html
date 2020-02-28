@@ -13,11 +13,11 @@
                     <div class="signup-form__field field">
                         <label class="field__label" for="{{ field.id_for_label }}">{{ field.label }}
                         </label>
-                        <div style="width: 430px;">
+                        <div class="field__input-wrapper">
                             {{ field|addclass:"field__input" }}
 
                             {% if field.help_text %}
-                                <span class="field__help-text" id="{{ field.id_for_label }}">{{ field.help_text }}</span>
+                                <div class="field__help-text" id="{{ field.id_for_label }}">{{ field.help_text }}</div>
                             {% endif %}
                         </div>
                     </div>
