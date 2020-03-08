@@ -5,7 +5,11 @@
 <section class="posts-block">
     <div class="post-block__wrapper">
         {% include "menu.html" %}
-        <h1 class="post-block__heading">Последние обновления</h1>
+        {% if paginator.count %}
+            <h1 class="post-block__heading">Последние обновления</h1>
+        {% else %}
+            <h1 class="post-block__heading">Вы ни на кого не подписаны</h1>
+        {% endif %}
         {% cache 20 index_page page.number request.path %}
             <ul class="post-block__list post-list">
                 {% for post in page %}

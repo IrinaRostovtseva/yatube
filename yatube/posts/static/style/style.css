@@ -319,9 +319,12 @@ body {
 }
 
 .form-card__description {
-    margin: 0;
-    margin-bottom: 30px;
-    padding: 0 50px;
+    margin: 0 40px 30px;
+    padding: 10px;
+}
+
+.form-card__description--alert {
+    background-color: rgba(255, 0, 0, 0.2);
 }
 
 .form-card__form {
@@ -379,6 +382,16 @@ body {
 .field__input:hover,
 .field__input:focus {
     border: 2px solid #68b738;
+}
+
+.errorlist {
+    width: 100%;
+    margin: 0;
+    margin-bottom: 10px;
+    padding: 7px;
+    list-style: none;
+    background-color: rgba(255, 0, 0, 0.2);
+    box-sizing: border-box;
 }
 
 .field__help-text {

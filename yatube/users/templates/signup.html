@@ -8,9 +8,9 @@
             <h1 class="form-card__heading">Зарегистрироваться</h1>
             <form class="form-card__form signup-form" method="post" action="{% url 'signup' %}">
                 {% csrf_token %}
-
-                {% for field in form%}
+                {% for field in form %}
                     <div class="signup-form__field field">
+                        {{ field.errors }}
                         <label class="field__label" for="{{ field.id_for_label }}">{{ field.label }}
                         </label>
                         <div class="field__input-wrapper">
@@ -24,12 +24,6 @@
                 {% endfor %}
                 <button type="submit" class="signup-form__btn btn" value="Зарегистрироваться">Зарегистрироваться</button>
             </form>
-
-            {% for error in form.errors %}
-                <div class="error-modal" role="alert">
-                    {{ error }}
-                </div>
-            {% endfor %}
         </div>
     </section>
 {% endblock %}
