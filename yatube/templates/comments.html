@@ -16,7 +16,7 @@
         </form>
         {% endif %}
         <ul class="comment-block__comments-list">
-            {% for comment in page %}
+            {% for comment in comments %}
             <li class="comment-block__comment comment">
                 <h2 class="comment__heading">
                     <a class="link"
@@ -27,6 +27,5 @@
             </li>
             {% endfor %}
         </ul>
-        {% include "paginator.html" with items=page paginator=paginator %}
     </div>
 </section>

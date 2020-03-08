@@ -14,15 +14,15 @@
                     </tr>
                     <tr>
                         <td>Подписчиков:</td>
-                        <td>0</td>
+                        <td>{{ user_profile.following.count }}</td>
                     </tr>
                     <tr>
                         <td>Подписан:</td>
-                        <td>0</td>
+                        <td>{{ user_profile.follower.count }}</td>
                     </tr>
                     <tr>
                         <td>Записей:</td>
-                        <td>{{ count }}</td>
+                        <td>{{ user_profile.author_posts.count }}</td>
                     </tr>
                 </table>
             </div>

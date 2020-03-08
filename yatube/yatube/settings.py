@@ -47,6 +47,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "sorl.thumbnail",
+    "debug_toolbar",
+]
+
+INTERNAL_IPS = [
+        "127.0.0.1",
 ]
 
 # Идентификатор текущего сайта
@@ -60,6 +65,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "yatube.urls"
@@ -95,6 +101,10 @@ DATABASES = {
         "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
     }
 }
+
+
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
 #Cache
 
@@ -151,12 +161,3 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 #Login
 LOGIN_URL = "auth/login"
 LOGIN_REDIRECT_URL = "index"
-
-
-# Logging
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "handlers": {"console": {"level": "DEBUG", "class": "logging.StreamHandler"}},
-    "loggers": {"django.db.backends": {"handlers": ["console"], "level": "DEBUG"}},
-}

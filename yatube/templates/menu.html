@@ -1,0 +1,12 @@
+{% if user.is_authenticated %}
+    <div class="menu-block">
+        <ul class="menu-block__list">
+            <li class="menu-block__item">
+                <a class="menu-block__link{% if request.path == '/' %} menu-block__link--active{% endif %}" href="/" tabindex="1">Все авторы</a>
+            </li>
+            <li class="menu-block__item">
+                <a class="menu-block__link{% if request.path == '/follow/' %} menu-block__link--active{% endif %}" href="/follow" tabindex="1">Избранные авторы</a>
+            </li>
+        </ul>
+    </div>
+{% endif %}

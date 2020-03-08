@@ -4,6 +4,9 @@ from . import views
 
 urlpatterns = [
     path("", views.index, name="index"),
+    path("follow/", views.follow_index, name="follow_index"),
+    path("<username>/follow", views.profile_follow, name="profile_follow"),
+    path("<username>/unfollow", views.profile_unfollow, name="profile_unfollow"),
     path("404/", views.page_not_found),
     path("500/", views.server_error),
     path("group/<slug>/", views.group_posts, name="group"),

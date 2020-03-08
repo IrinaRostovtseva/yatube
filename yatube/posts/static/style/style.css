@@ -172,6 +172,45 @@ body {
     padding: 0 80px;
 }
 
+.menu-block {
+    margin-bottom: 40px;
+}
+
+.menu-block__list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-block__link {
+    display: block;
+    padding: 5px 10px;
+    border: 1px solid #68b738;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    background-color: #68b738;
+    font: inherit;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.menu-block__link:not(.menu-block__link--active):hover,
+.menu-block__link:not(.menu-block__link--active):focus {
+    text-decoration: underline;
+}
+
+.menu-block__link:not(.menu-block__link--active):active {
+    text-decoration: underline;
+    background-color: #5eaa2f;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.menu-block__link--active {
+    color: inherit;
+    background-color: transparent;
+}
+
 .post-block__heading,
 .group-block__heading,
 .heading,
@@ -518,6 +557,7 @@ input[type="checkbox"]:checked + label[for="image-clear_id"]::after {
 .user-profile__info {
     width: 100%;
     font: inherit;
+    margin-bottom: 15px;
 }
 
 .user-profile__info td {

@@ -4,8 +4,9 @@
 {% load thumbnail cache %}
 <section class="posts-block">
     <div class="post-block__wrapper">
+        {% include "menu.html" %}
         <h1 class="post-block__heading">Последние обновления</h1>
-        {% cache 20 index_page %}
+        {% cache 20 index_page page.number request.path %}
             <ul class="post-block__list post-list">
                 {% for post in page %}
                 <li class="post-list__item">

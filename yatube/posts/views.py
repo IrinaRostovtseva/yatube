@@ -3,10 +3,9 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.cache import cache_page
 
 from .forms import CommentForm, PostForm
-from .models import Comment, Group, Post, User
+from .models import Comment, Group, Post, User, Follow
 
 
-@cache_page(20)
 def index(request):
     post_list = Post.objects.prefetch_related("author").order_by("-pub_date")
     paginator = Paginator(post_list, 10)
@@ -19,9 +18,51 @@ def index(request):
     return render(request, "index.html", context)
 
 
+def follow_index(request):
+    if request.user.is_authenticated:
+        post_list = Post.objects.filter(
+            author__following__user=request.user).order_by("-pub_date")
+        paginator = Paginator(post_list, 10)
+        page_number = request.GET.get("page")
+        page = paginator.get_page(page_number)
+        context = {
+            "page": page,
+            "paginator": paginator
+        }
+        return render(request, "index.html", context)
+    return redirect("login")
+
+
+def profile_follow(request, username):
+    if request.user.is_authenticated:
+        if request.user.username == username:
+            return redirect("profile", username=username)
+
+        following = User.objects.get(username=username)
+        is_follow = Follow.objects.filter(
+                user=request.user, author=following).exists()
+        if request.method == "GET":
+            if is_follow:
+                return redirect("profile_unfollow", username=username)
+            Follow.objects.create(user=request.user, author=following)
+            return redirect("profile", username=username)
+    return redirect("login")
+
+
+def profile_unfollow(request, username):
+    if request.user.is_authenticated:
+        following = get_object_or_404(User, username=username)
+        if request.method == "GET":
+            follow = Follow.objects.filter(
+                user=request.user.id, author=following).delete()
+            return redirect("profile", username=username)
+    return redirect("login")
+
+
 def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
-    posts = Post.objects.select_related("author", "group").filter(group=group).order_by("-pub_date")
+    posts = Post.objects.select_related("author", "group").filter(
+        group=group).order_by("-pub_date")
     paginator = Paginator(posts, 10)
     page_num = request.GET.get("page")
     page = paginator.get_page(page_num)
@@ -52,41 +93,44 @@ def new_post(request):
 
 def profile(request, username):
     user_profile = get_object_or_404(User, username=username)
-    posts = Post.objects.select_related("author").filter(author=user_profile.id).order_by("-pub_date")
+    posts = Post.objects.select_related("author").filter(
+        author=user_profile.id).order_by("-pub_date")
     paginator = Paginator(posts, 5)
     page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
+    following = False
+    if request.user.is_authenticated:
+        following = Follow.objects.filter(user=request.user, author=user_profile).exists()
     context = {
         "user_profile": user_profile,
         "page": page,
         "paginator": paginator,
+        "following": following,
     }
     return render(request, "profile.html", context)
 
 
 def post_view(request, username, post_id):
     user_profile = get_object_or_404(User, username=username)
-    posts_count = Post.objects.filter(author=user_profile.id).count()
     post = get_object_or_404(Post, id=post_id)
     form = CommentForm()
-    comments = Comment.objects.select_related("author", "post").filter(post=post_id).order_by("-created")
-    paginator = Paginator(comments, 10)
-    page_num = request.GET.get("page")
-    page = paginator.get_page(page_num)
+    comments = Comment.objects.filter(post=post_id).order_by("-created")
+    following = False
+    if request.user.is_authenticated:
+        Follow.objects.filter(user=request.user).exists()
     context = {
         "user_profile": user_profile,
         "post": post,
-        "count": posts_count,
         "form": form,
-        "paginator": paginator,
-        "page": page,
+        "comments": comments,
+        "following": following,
     }
     return render(request, "post.html", context)
 
 
 def post_edit(request, username, post_id):
     post = get_object_or_404(Post, id=post_id)
-    if username == str(request.user):
+    if username == request.user.username:
         if request.method == "POST":
             form = PostForm(request.POST or None,
                             files=request.FILES or None, instance=post)

@@ -16,7 +16,8 @@ class Group(models.Model):
 
 class Post(models.Model):
     text = models.TextField(verbose_name="Сообщение")
-    pub_date = models.DateTimeField("date published", auto_now_add=True, db_index=True)
+    pub_date = models.DateTimeField(
+        "date published", auto_now_add=True, db_index=True)
     author = models.ForeignKey(User, verbose_name="Автор", on_delete=models.CASCADE,
                                related_name="author_posts")
     group = models.ForeignKey(Group, verbose_name="Группа", on_delete=models.SET_NULL,
@@ -38,3 +39,18 @@ class Comment(models.Model):
 
     def __str__(self):
         return str(self.pk)
+
+
+class Follow(models.Model):
+    # ссылка на объект пользователя, который подписывается
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="follower")
+    # ссылка на объект пользователя, на которого подписываются
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="following", blank=True, null=True)
+
+    class Meta:
+        unique_together = ["user", "author"]
+
+    def __str__(self):
+        return f"{self.user} -> {self.author}"

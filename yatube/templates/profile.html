@@ -13,17 +13,24 @@
                     </tr>
                     <tr>
                         <td>Подписчиков:</td>
-                        <td>0</td>
+                        <td>{{ user_profile.following.count }}</td>
                     </tr>
                     <tr>
                         <td>Подписан:</td>
-                        <td>0</td>
+                        <td>{{ user_profile.follower.count }}</td>
                     </tr>
                     <tr>
                         <td>Записей:</td>
-                        <td>{{ paginator.count }}</td>
+                        <td>{{ user_profile.author_posts.count }}</td>
                     </tr>
                 </table>
+                {% if user_profile.username != request.user.username %}
+                    {% if following %}
+                        <a href="{% url 'profile_unfollow' username=user_profile.username %}" class="user-profile__btn btn btn--light-accent">Отписаться</a>
+                    {% else %}
+                        <a href="{% url 'profile_follow' username=user_profile.username %}" class="user-profile__btn btn">Подписаться</a>
+                    {% endif %}
+                {% endif %}
             </div>
         </section>
         <section class="user-posts">
