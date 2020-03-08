@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "sorl.thumbnail",
     "debug_toolbar",
-    "ngrok"
 ]
 
 INTERNAL_IPS = [
