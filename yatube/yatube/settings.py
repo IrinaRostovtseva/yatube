@@ -26,10 +26,7 @@ SECRET_KEY = "&zm0y_u5yim6iuk6uas))8c2-ct-!om88af&x&q$4c(*90(c)l"
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    "[::1]",
-    "testserver",
+    "*",
 ]
 
 
@@ -48,6 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "sorl.thumbnail",
     "debug_toolbar",
+    "ngrok"
 ]
 
 INTERNAL_IPS = [
@@ -138,7 +136,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "ru"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Europe/Moscow"
 
 USE_I18N = True
 
