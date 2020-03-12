@@ -14,24 +14,24 @@
                     </tr>
                     <tr>
                         <td>Подписчиков:</td>
-                        <td>{{ user_profile.following.count }}</td>
+                        <td>{{ following_count }}</td>
                     </tr>
                     <tr>
                         <td>Подписан:</td>
-                        <td>{{ user_profile.follower.count }}</td>
+                        <td>{{ follower_count }}</td>
                     </tr>
                     <tr>
                         <td>Записей:</td>
-                        <td>{{ user_profile.author_posts.count }}</td>
+                        <td>{{ posts_count }}</td>
                     </tr>
                 </table>
             </div>
         </section>
         <section class="user-posts">
             <div class="user-posts__wrapper">
-                <h1 class="user-posts__heading">Пост {{ post.id }} пользователя {{ post.author }}</h1>
+                <h1 class="user-posts__heading">Пост пользователя {{ post.author }}</h1>
                 <div class="post__item">
-                    {% include "post_item.html" with post=post %}
+                    {% include "post_item.html" with post=post comments_count=comments_count %}
                 </div>
             </div>
             {% include "comments.html" %}
