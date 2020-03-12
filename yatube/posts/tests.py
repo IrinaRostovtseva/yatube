@@ -180,7 +180,7 @@ class TestImageUpload(TestCase):
         cache.clear()
 
     def test_not_image_upload(self):
-        with open(os.path.join(settings.BASE_DIR, "requirements.txt"), "rb") as fp:
+        with open(os.path.join(settings.BASE_DIR, "test_non_pic.txt"), "rb") as fp:
             response = self.client.post(
                 reverse("new_post"), {"text": "post with non pic", "image": fp})
             self.assertNotIn("<img", self.client.get(

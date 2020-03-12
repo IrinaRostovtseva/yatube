@@ -101,9 +101,9 @@ def profile(request, username):
     page = paginator.get_page(page_number)
     following = False
     follower_count = Follow.objects.select_related(
-        "author").filter(author=user_profile).count()
+        "author").filter(user=user_profile).count()
     following_count = Follow.objects.select_related(
-        "user").filter(user=user_profile).count()
+        "user").filter(author=user_profile).count()
     if request.user.is_authenticated:
         following = Follow.objects.filter(
             user=request.user, author=user_profile).exists()
@@ -128,9 +128,9 @@ def post_view(request, username, post_id):
     comments_count = comments.count()
     following = False
     follower_count = Follow.objects.select_related(
-        "author").filter(author=user_profile).count()
+        "author").filter(user=user_profile).count()
     following_count = Follow.objects.select_related(
-        "user").filter(user=user_profile).count()
+        "user").filter(author=user_profile).count()
     if request.user.is_authenticated:
         Follow.objects.filter(user=request.user, author=user_profile).exists()
     context = {

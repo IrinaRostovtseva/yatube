@@ -24,7 +24,7 @@
                         <td>{{ posts_count }}</td>
                     </tr>
                 </table>
-                {% if user_profile.username != request.user.username %}
+                {% if user_profile.username != request.user.username and request.user.is_authenticated %}
                     {% if following %}
                         <a href="{% url 'profile_unfollow' username=user_profile.username %}" class="user-profile__btn btn btn--light-accent">Отписаться</a>
                     {% else %}

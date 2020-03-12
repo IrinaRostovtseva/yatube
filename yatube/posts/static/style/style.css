@@ -199,13 +199,17 @@ body {
     text-decoration: none;
 }
 
-.menu-block__link:not(.menu-block__link--active):hover,
-.menu-block__link:not(.menu-block__link--active):focus {
+.menu-block__link:not(.menu-block__link--active) {
     text-decoration: underline;
 }
 
+.menu-block__link:not(.menu-block__link--active):hover,
+.menu-block__link:not(.menu-block__link--active):focus {
+    text-decoration: none;
+}
+
 .menu-block__link:not(.menu-block__link--active):active {
-    text-decoration: underline;
+    text-decoration: none;
     background-color: #5eaa2f;
     color: rgba(255, 255, 255, 0.7);
 }
@@ -636,6 +640,7 @@ input[type="checkbox"]:checked + label[for="image-clear_id"]::after {
 .post__date {
     display: block;
     margin-bottom: 25px;
+    color: #888888;
     font-style: italic;
     text-align: right;
 }
