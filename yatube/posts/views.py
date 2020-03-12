@@ -7,7 +7,7 @@ from .models import Comment, Group, Post, User, Follow
 
 
 def index(request):
-    post_list = Post.objects.prefetch_related("author").order_by("-pub_date")
+    post_list = Post.objects.select_related("author").order_by("-pub_date").all()
     paginator = Paginator(post_list, 10)
     page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
@@ -20,7 +20,7 @@ def index(request):
 
 def follow_index(request):
     if request.user.is_authenticated:
-        post_list = Post.objects.filter(
+        post_list = Post.objects.select_related("author").filter(
             author__following__user=request.user).order_by("-pub_date")
         paginator = Paginator(post_list, 10)
         page_number = request.GET.get("page")
@@ -40,7 +40,7 @@ def profile_follow(request, username):
 
         following = User.objects.get(username=username)
         is_follow = Follow.objects.filter(
-                user=request.user, author=following).exists()
+            user=request.user, author=following).exists()
         if request.method == "GET":
             if is_follow:
                 return redirect("profile_unfollow", username=username)
@@ -95,17 +95,26 @@ def profile(request, username):
     user_profile = get_object_or_404(User, username=username)
     posts = Post.objects.select_related("author").filter(
         author=user_profile.id).order_by("-pub_date")
+    posts_count = posts.count()
     paginator = Paginator(posts, 5)
     page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
     following = False
+    follower_count = Follow.objects.select_related(
+        "author").filter(author=user_profile).count()
+    following_count = Follow.objects.select_related(
+        "user").filter(user=user_profile).count()
     if request.user.is_authenticated:
-        following = Follow.objects.filter(user=request.user, author=user_profile).exists()
+        following = Follow.objects.filter(
+            user=request.user, author=user_profile).exists()
     context = {
         "user_profile": user_profile,
         "page": page,
         "paginator": paginator,
         "following": following,
+        "following_count": following_count,
+        "follower_count": follower_count,
+        "posts_count": posts_count,
     }
     return render(request, "profile.html", context)
 
@@ -113,17 +122,27 @@ def profile(request, username):
 def post_view(request, username, post_id):
     user_profile = get_object_or_404(User, username=username)
     post = get_object_or_404(Post, id=post_id)
+    posts_count = Post.objects.filter(author=user_profile).count()
     form = CommentForm()
-    comments = Comment.objects.filter(post=post_id).order_by("-created")
+    comments = Comment.objects.select_related("post", "author").filter(post=post_id).order_by("-created")
+    comments_count = comments.count()
     following = False
+    follower_count = Follow.objects.select_related(
+        "author").filter(author=user_profile).count()
+    following_count = Follow.objects.select_related(
+        "user").filter(user=user_profile).count()
     if request.user.is_authenticated:
-        Follow.objects.filter(user=request.user).exists()
+        Follow.objects.filter(user=request.user, author=user_profile).exists()
     context = {
         "user_profile": user_profile,
         "post": post,
         "form": form,
         "comments": comments,
         "following": following,
+        "following_count": following_count,
+        "follower_count": follower_count,
+        "posts_count": posts_count,
+        "comments_count": comments_count,
     }
     return render(request, "post.html", context)
 
@@ -184,6 +203,7 @@ def add_comment(request, username, post_id):
                 "post": post,
             }
             return render(request, "post.html", context)
+        return redirect("post", username=username, post_id=post_id)
     return redirect("login")
 
 
