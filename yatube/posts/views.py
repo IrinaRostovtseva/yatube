@@ -7,7 +7,7 @@ from .models import Comment, Group, Post, User, Follow
 
 
 def index(request):
-    post_list = Post.objects.select_related("author").order_by("-pub_date").all()
+    post_list = Post.objects.select_related("author", "group").order_by("-pub_date").all()
     paginator = Paginator(post_list, 10)
     page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
@@ -53,7 +53,7 @@ def profile_unfollow(request, username):
     if request.user.is_authenticated:
         following = get_object_or_404(User, username=username)
         if request.method == "GET":
-            follow = Follow.objects.filter(
+            Follow.objects.filter(
                 user=request.user.id, author=following).delete()
             return redirect("profile", username=username)
     return redirect("login")
@@ -93,7 +93,7 @@ def new_post(request):
 
 def profile(request, username):
     user_profile = get_object_or_404(User, username=username)
-    posts = Post.objects.select_related("author").filter(
+    posts = Post.objects.select_related("author", "group").filter(
         author=user_profile.id).order_by("-pub_date")
     posts_count = posts.count()
     paginator = Paginator(posts, 5)
@@ -101,9 +101,9 @@ def profile(request, username):
     page = paginator.get_page(page_number)
     following = False
     follower_count = Follow.objects.select_related(
-        "author").filter(user=user_profile).count()
+        "user", "author").filter(user=user_profile).count()
     following_count = Follow.objects.select_related(
-        "user").filter(author=user_profile).count()
+        "user", "author").filter(author=user_profile).count()
     if request.user.is_authenticated:
         following = Follow.objects.filter(
             user=request.user, author=user_profile).exists()
