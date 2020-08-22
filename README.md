@@ -12,9 +12,9 @@
 1. Склонируйте проект
 2. В директории проекта создаете и активируйте виртуальное окружение
 
-      python3 -m venv venv
-      . venv/bin/activate
+       python3 -m venv venv
+       . venv/bin/activate
   
 3. Установите зависимости проекта
     
-      pip3 install -r requirements.txt
+       pip3 install -r requirements.txt
