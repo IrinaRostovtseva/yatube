@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %} Последние обновления {% endblock %}
+{% block content %}
+{% load thumbnail cache %}
+<section class="posts-block">
+    <div class="post-block__wrapper">
+        {% include "menu.html" %}
+        <h1 class="post-block__heading">Последние обновления</h1>
+        {% cache 20 index_page page.number request.path %}
+            <ul class="post-block__list post-list">
+                {% for post in page %}
+                <li class="post-list__item">
+                    {% include "post_item.html" with post=post %}
+                </li>
+                {% endfor %}
+            </ul>
+        {% endcache %}
+        {% include "paginator.html" with items=page paginator=paginator %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% load user_filters %}
+<section class="comment-block">
+    <div class="comment-block__wrapper">
+        <h1 class="comment-block__heading heading">Комментарии</h1>
+        {% if user.is_authenticated %}
+        <h2 class="comment-block__form-heading">Добавить комментарий:</h2>
+        <form class="comment-block__form" action="{% url 'add_comment' username=post.author.username post_id=post.id %}"
+            method="POST">
+            {% csrf_token %}
+            <div class="comment-block__form-field field">
+                <label class="field__label visually-hidden"
+                    for="{{ form.text.id_for_label }}">{{ form.text.label }}</label>
+                {{ form.text|addclass:"field__input" }}
+            </div>
+            <button type="submit" class="comment-block__btn btn">Отправить</button>
+        </form>
+        {% endif %}
+        <ul class="comment-block__comments-list">
+            {% for comment in comments %}
+            <li class="comment-block__comment comment">
+                <h2 class="comment__heading">
+                    <a class="link"
+                        href="{% url 'profile' username=comment.author.username %}">{{ comment.author.username }}</a>
+                </h2>
+                <p class="comment__text">{{ comment.text }}</p>
+                <date class="comment__date" date="{{ comment.created }}">{{ comment.created }}</date>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>

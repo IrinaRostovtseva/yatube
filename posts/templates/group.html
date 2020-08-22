@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %} Записи сообщества {{ group.title }} {% endblock %}
+
+{% block content %}
+{% load thumbnail %}
+    <section class="group-block">
+        <div class="group-block__wrapper">
+            <h1>{{ group.title }}</h1>
+            <p>{{ group.description }}</p>
+            <ul class="group-block__post-list post-list">
+                {% for post in page %}
+                    <li class="post-list__item">
+                        {% include "post_item.html" with post=post %}
+                    </li>
+                {% endfor %}
+            </ul>
+            {% include "paginator.html" with items=page paginator=paginator %}
+        </div>
+    </section>
+{% endblock %}

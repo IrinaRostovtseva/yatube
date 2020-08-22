@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Профиль {{ user.username }}{% endblock%}
+
+{% block content %}
+{% load thumbnail %}
+    <div class="profile-container">
+        <section class="user-profile">
+            <div class="user-profile__wrapper">
+                <h1 class="user-profile__heading">{{ user_profile.get_full_name }}</h1>
+                <table class="user-profile__info user-info">
+                    <tr>
+                        <td>username:</td>
+                        <td>@{{ user_profile.username }}</td>
+                    </tr>
+                    <tr>
+                        <td>Подписчиков:</td>
+                        <td>{{ user_profile.following.count }}</td>
+                    </tr>
+                    <tr>
+                        <td>Подписан:</td>
+                        <td>{{ user_profile.follower.count }}</td>
+                    </tr>
+                    <tr>
+                        <td>Записей:</td>
+                        <td>{{ user_profile.author_posts.count }}</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+        <section class="user-posts">
+            <div class="user-posts__wrapper">
+                <h1 class="user-posts__heading">Пост {{ post.id }} пользователя {{ post.author }}</h1>
+                {% include "post_item.html" with post=post %}
+            </div>
+            {% include "comments.html" %}
+        </section>
+    </div>
+{% endblock %}
