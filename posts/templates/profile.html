@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-{% block title %}Профиль {{ user.username }}{% endblock%}
+
+{% block title %}Профиль {{ user.username }}{% endblock %}
 
 {% block content %}
     <div class="profile-container">
@@ -24,7 +25,7 @@
                         <td>{{ user_profile.author_posts.count }}</td>
                     </tr>
                 </table>
-                {% if user_profile.username != request.user.username %}
+                {% if user_profile.username != request.user.username and request.user.is_authenticated %}
                     {% if following %}
                         <a href="{% url 'profile_unfollow' username=user_profile.username %}" class="user-profile__btn btn btn--light-accent">Отписаться</a>
                     {% else %}
@@ -38,7 +39,7 @@
                 <h1 class="user-posts__heading">Все записи пользователя {{ post.author }}</h1>
                 <ul class="user-posts__list post-list">
                     {% for post in page %}
-                    {% load thumbnail %}
+                        {% load thumbnail %}
                         <li class="post-list__item">
                             {% include "post_item.html" with post=post %}
                         </li>
