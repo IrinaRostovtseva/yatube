@@ -35,6 +35,7 @@ body {
     position: relative;
     background-color: var(--primery-color);
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
+    z-index: 10;
 }
 
 .header__wrapper {
@@ -324,7 +325,7 @@ body {
 .field label {
     display: block;
     width: 100%;
-    margin-bottom: 7px;
+    margin-bottom: 12px;
     text-align: left;
 }
 
@@ -343,7 +344,7 @@ body {
     width: 100%;
     height: 32px;
     padding: 5px 10px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     border: 1px solid #a2a2a2;
     border-radius: 3px;
     font-size: 16px;
@@ -487,25 +488,69 @@ body {
 .new-post__form textarea {
     width: 100%;
     min-height: 130px;
+    padding-top: 10px;
 }
 
 .new-post__form select[size="3"] {
     height: 75px;
 }
 
+.new-post__form #image-clear_id {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}
+
+.new-post__form label[for="image-clear_id"] {
+    position: relative;
+    width: 100%;
+}
+
+.new-post__form label[for="image-clear_id"]::before {
+    position: absolute;
+    left: 145px;
+    content: "";
+    width: 23px;
+    height: 23px;
+    border: 2px solid var(--primery-color);
+    border-radius: 4px;
+}
+
+.new-post__form #image-clear_id:hover+label[for="image-clear_id"]::before {
+    border-color: var(--primery-color-hover);
+}
+
+.new-post__form #image-clear_id:checked+label[for="image-clear_id"]::before {
+    background-image: url("../images/checkmark.svg");
+    background-position: center;
+    background-size: contain;
+}
+
+.new-post__form #id_image {
+    padding: 5px 0;
+    border: none;
+}
+
 
 /* group */
 
 .group-block__heading {
-    margin-bottom: 0;
+    margin-bottom: 30px;
 }
 
 .group-block__description {
     margin: 0;
-    margin-bottom: 30px;
+    margin-bottom: 50px;
+    padding: 15px 10px;
     font: inherit;
-    font-size: 18px;
-    line-height: 22px;
+    background-color: rgba(210, 210, 210, 0.4);
+    border-radius: 4px;
 }
 
 .group-block__slug {
@@ -592,8 +637,9 @@ body {
     font-weight: normal;
 }
 
-.post__link {
+.post__group-link {
     display: inline-block;
+    margin-bottom: 15px;
     padding: 0 5px 0 0;
     font: inherit;
 }
@@ -854,7 +900,6 @@ body {
         padding: 0 80px;
     }
     .post-block__heading,
-    .group-block__heading,
     .heading,
     .user-profile__heading,
     .user-posts__heading {
@@ -862,7 +907,7 @@ body {
     }
     /* form card */
     .form-card__wrapper {
-        max-width: 850px;
+        max-width: 780px;
         margin: 30px auto;
     }
     .form-card__heading {
@@ -879,7 +924,7 @@ body {
         background-color: rgba(255, 0, 0, 0.2);
     }
     .form-card__form {
-        width: 690px;
+        width: 600px;
         padding: 25px 0 65px;
     }
     .field {
@@ -888,19 +933,6 @@ body {
     }
     .field:last-of-type {
         margin-bottom: 40px;
-    }
-    .field__label,
-    .field label {
-        min-width: 240px;
-        width: auto;
-        margin-right: 20px;
-        text-align: right;
-    }
-    .field__input-wrapper {
-        width: 430px;
-    }
-    .field__input {
-        width: 200px;
     }
     .btn-group,
     .form-card__btn-group {
@@ -931,21 +963,13 @@ body {
         flex-wrap: wrap;
         justify-content: center;
     }
-    .new-post__form .field__label,
-    .new-post__form label {
+    .new-post__form .field__label {
         min-width: 140px;
     }
     .new-post__form textarea,
-    .new-post__form input,
+    .new-post__form input:not([type="checkbox"]),
     .new-post__form select {
-        width: 400px;
-    }
-    /* group */
-    .group-block__heading {
-        margin-bottom: 0;
-    }
-    .group-block__description {
-        margin-bottom: 50px;
+        width: 100%;
     }
     /* user profile */
     .profile-container {
